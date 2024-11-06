@@ -1,18 +1,27 @@
-import express from 'express'
-import connectDB from './db/index.js'
-import cookieParser from 'cookie-parser'
-import cors from 'cors'
+import express from "express";
+import connectDB from "./db/index.js";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import userRouter from "./routes/user.route.js";
 
+const app = express();
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+  })
+);
 
+app.use(express.json());
+app.use(cookieParser());
 
-const app = express()
-connectDB()
+connectDB();
 
-app.use(cookieParser())
-app.use(express.json())
-app.get("/", (req, res) => {
-   res.send("working fine")
-})
+app.get("/", (req, res) => 
+   {
+  res.send("working fine");
+});
 
+app.use("/api/users", userRouter);
 
 export default app;
