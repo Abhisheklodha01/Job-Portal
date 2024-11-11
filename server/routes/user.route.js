@@ -6,13 +6,15 @@ import {
   Registercontroller,
 } from "../controllers/user.controller.js";
 import { isAuthenticated } from "../middlewares/auth.middleware.js";
+import { searchJob } from "../controllers/jobs.controller.js";
 
 const router = Router();
 
-router.post("/register", Registercontroller);
+router.post("/signup", Registercontroller);
 router.post("/login", Logincontroller);
-router.put("fotgot-password", ForgotPasswordController);
-router.get("user-profile", isAuthenticated, GetUserProfileController);
+router.put("/forgot-password", ForgotPasswordController);
+router.get("/user-profile", isAuthenticated, GetUserProfileController);
+router.get("/jobs", searchJob)
 
 
 export default router
