@@ -19,9 +19,9 @@ const Jobs = () => {
       <div className="min-h-screen bg-gray-800 text-white">
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4">
           {jobs.map((job:any) => (
-            <div className="max-w-sm w-full bg-gray-600 border mt-8 m-3 md:m-5 ml-12
+            <div className="max-w-sm w-full bg-gray-600 border mt-8 md:m-5 ml-3 md:ml-12
              border-gray-400 rounded-lg shadow-md sm:max-w-xs md:max-w-sm lg:max-w-md text-gray-200">
-              <div className="p-4 mr-5">
+              <div className="p-4 ">
                 <h2 className="text-lg truncate">Job Title: {" "} {job?.job_name || job?.job_title}</h2>
                 <h3 className="text-lg truncate">
                   Company: {job?.company_name || job?.company}
