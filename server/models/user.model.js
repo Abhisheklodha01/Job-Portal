@@ -3,7 +3,7 @@ import {
   addressSchema,
   experienceSchema,
   qualificationSchema,
-} from "./userDetails.model";
+} from "./userDetails.model.js";
 
 const userSchema = new Schema(
   {
@@ -16,15 +16,12 @@ const userSchema = new Schema(
       required: true,
     },
     phoneNumber: {
-      type: Number,
+      type: String,
       required: true,
     },
     password: {
       type: String,
       required: true,
-    },
-    otp: {
-      type: String,
     },
     qualifications: [qualificationSchema],
     experience: [experienceSchema],
