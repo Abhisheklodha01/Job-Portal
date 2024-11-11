@@ -1,26 +1,64 @@
 "use client";
-import React from "react";
+import React, { useContext, useState } from "react";
 import { Label } from "../components/ui/label";
 import { Input } from "../components/ui/input";
 import { cn } from "../lib/utils";
-import { BackgroundBeams } from "../components/ui/background-beams";
-import { Meteors } from "../components/ui/meteors";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { backendUrl } from "../helpers/server";
+import toast from "react-hot-toast";
+import { userContex } from "../context/userContex.ts";
 
-function Signup() {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+function Login() {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { isAuthenticated} = useContext(
+    userContex
+  );
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form submitted");
+    try {
+      const { data } = await axios.post(
+        `${backendUrl}/users/login`,
+        {
+          email,
+          password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      localStorage.setItem("JopPortal-Auth_Token", data.token);
+      toast.success(data.message, {
+        position: "top-center",
+      });
+      navigate("/jobs");
+    } catch (error:any) {
+      toast.error(error.response.message, {
+        position: "top-center",
+      });
+    }
   };
+
+ 
+   
+  if(isAuthenticated === true) {
+    navigate("/jobs");
+  }
+
   return (
     <div
-      className=" h-screen  bg-gray-700 flex items-center
+      className="bg-gray-700 flex items-center
      justify-center w-full flex-col px-4"
     >
-    <BackgroundBeams className="absolute top-0 left-0 w-full h-full z-0" />
       <div
-        className=" mt-16 max-w-md w-full mx-auto 
+        className="max-w-md w-full mx-auto 
        ml-6 mr-6 rounded-2xl p-4 md:p-8 shadow-input
-        bg-white dark:bg-black z-20"
+        bg-white dark:bg-black z-20 mt-16 mb-16"
       >
         <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
           Welcome back to Jobs4Freshers
@@ -32,11 +70,33 @@ function Signup() {
         <form className="my-8" onSubmit={handleSubmit}>
           <LabelInputContainer className="mb-4">
             <Label htmlFor="email">Email Address</Label>
-            <Input id="email" placeholder="projectmayhem@fc.com" type="email" />
+            <Input
+              id="email"
+              placeholder="projectmayhem@fc.com"
+              type="email"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+            />
           </LabelInputContainer>
           <LabelInputContainer className="mb-8">
             <Label htmlFor="twitterpassword">Password</Label>
-            <Input id="password" placeholder="••••••••" type="password" />
+            <Input
+              id="password"
+              placeholder="••••••••"
+              type="password"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+            />
+            <div className="flex flex-row justify-between">
+              <Link to={"/forgot-password"} className="text-red-500">
+                {" "}
+                Forgot Password
+              </Link>
+              <Link to={"/register"} className="text-green-500">
+                {" "}
+                Don't have an account
+              </Link>
+            </div>
           </LabelInputContainer>
 
           <button
@@ -47,7 +107,6 @@ function Signup() {
             <BottomGradient />
           </button>
         </form>
-        <Meteors number={10} />
       </div>
     </div>
   );
@@ -76,4 +135,4 @@ const LabelInputContainer = ({
   );
 };
 
-export default Signup;
+export default Login;
