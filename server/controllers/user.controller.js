@@ -6,7 +6,10 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const Registercontroller = async (req, res) => {
+ 
   const { name, email, password, phoneNumber } = req.body;
+  console.log(name, email, password, phoneNumber );
+  
   try {
     if (!name || !email || !password || !phoneNumber) {
       return res.status(400).json({
@@ -36,7 +39,7 @@ export const Registercontroller = async (req, res) => {
       httpOnly: true,
     };
     const token = jwt.sign({ _id: user._id }, process.env.JWT_KEY);
-    return res.status(200).cookie("token", token, options).json({
+    return res.status(200).cookie("JobPortal-Auth_token", token, options).json({
       success: true,
       message: "Registered successfully",
       user,
@@ -87,7 +90,7 @@ export const Logincontroller = async (req, res) => {
       .cookie("token", token, options)
       .json({
         success: true,
-        message: `welcome back ${user.fullName}`,
+        message: `welcome back ${user.name}`,
         user,
         token,
       });
