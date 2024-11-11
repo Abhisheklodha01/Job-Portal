@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
 import { BackgroundLines } from "../components/ui/background-lines";
 import { Button } from "../components/ui/moving-border";
+import { useContext } from "react";
+import { userContex } from "../context/userContex";
 
 function Home() {
+  const { isAuthenticated } = useContext(userContex);
   return (
     <BackgroundLines
       className="bg-gray-900 min-h-screen flex items-center 
@@ -24,8 +27,9 @@ function Home() {
         Get the best jobs match from our website, according to your interest,
         expreience, skills and education, totally free.
       </p>
-      <Link to={"/register"}
-      className="mt-5"
+      <Link
+        to={isAuthenticated === true ? "/jobs" : "/register"}
+        className="mt-5"
       >
         <Button
           borderRadius="1.75rem"
